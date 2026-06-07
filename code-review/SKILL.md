@@ -1,6 +1,15 @@
 ---
 name: code-review
-description: Systematic AI-assisted code review that produces structured, evidence-based review reports. Trigger when the user says "review this", "review my changes", "check this PR", "code review", "look at this code", "is this code good".
+description: |
+  Systematic AI-assisted code review that produces structured, evidence-based review reports.
+  Use this skill whenever the user wants code reviewed, checked, or audited — before merge, after implementation, or as a quality gate.
+  Trigger phrases: "review this", "review my changes", "check this PR", "code review", "look at this code",
+  "is this code good", "check for bugs", "find issues in this code", "before I merge", "pre-release check",
+  "帮我 review", "代码审查", "帮我看看代码有没有问题", "检查一下代码", "这个 PR 有没有问题",
+  "这段代码能合并吗", "审查一下", "帮我找找 bug",
+  "review the diff", "what's wrong with this code", "can this be improved", "security review",
+  "performance review", "architecture review", "quality audit".
+  Also use when the user shares code and asks "is this correct?" or "any feedback?" — don't just answer from memory, do a structured review.
 ---
 
 # Code Review
@@ -350,13 +359,21 @@ Review mandate:
 | Skipping impact scope mapping | Tunnel vision on the diff misses downstream breakage |
 | Assuming tests = verified | Tests may not cover the changed paths — check coverage, not just green/red |
 
-## References
+## References — When to Read What
 
-- `references/template.md` — report format, section writing guidelines, severity decision tree
-- `references/template.html` — full HTML example with inline CSS, collapsible findings, color-coded severity badges, floating TOC, and styled callout boxes
-- `references/constraints.md` — placeholder and incomplete implementation patterns (human-readable)
-- `references/constraints.json` — same patterns in machine-readable format, for building check scripts
-- `references/communication.md` — feedback techniques, bilingual severity labels, Chinese team anti-patterns, red flags
+References are loaded on demand. **Do not read them upfront** — only open them when the situation calls for it.
+
+| When | Read |
+|------|------|
+| Writing the report (Phase 5) — need exact section structure, severity decision tree, or report format | `references/template.md` |
+| User requests HTML output instead of Markdown | `references/template.html` (English) **or** `references/template_zh.html` (bilingual Chinese+English headings) |
+| Reviewing on GitHub/GitLab — need inline PR comment format | `references/template.md` Section 6 (PR Comment Format Variant) |
+| Running Angle 7 (placeholder detection) — need the pattern list for manual scan | `references/constraints.md` |
+| Running a constraint check script — machine-readable pattern definitions | `references/constraints.json` |
+| Writing findings feedback — need expression patterns, severity label formats, or dealing with Chinese team dynamics | `references/communication.md` |
+| Writing feedback for a Chinese-speaking team — need bilingual labels or team anti-pattern guidance | `references/communication.md` Sections 1–3 |
+
+> **HTML template note:** `template.html` and `template_zh.html` have polished inline CSS — collapsible sections, color-coded severity badges, floating TOC, styled callout boxes. The `_zh` variant has bilingual section headings (Chinese + English). Pick the one matching the user's language.
 
 ## Exit Conditions
 

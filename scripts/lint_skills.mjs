@@ -29,10 +29,22 @@ function parseFrontmatter(content) {
   const end = content.indexOf("---", 3);
   if (end === -1) return null;
   const raw = content.slice(3, end).trim();
+  const lines = raw.split("\n");
   const fields = {};
-  for (const line of raw.split("\n")) {
-    const m = line.match(/^(\w[\w-]*):\s*(.+)/);
-    if (m) fields[m[1]] = m[2].trim();
+  for (let i = 0; i < lines.length; i++) {
+    const m = lines[i].match(/^(\w[\w-]*):\s*(.*)/);
+    if (!m) continue;
+    const key = m[1];
+    let val = m[2].trim();
+    if (val === "|" || val === ">") {
+      // YAML multiline: collect indented lines
+      const parts = [];
+      for (let j = i + 1; j < lines.length && /^\s+\S/.test(lines[j]); j++) {
+        parts.push(lines[j].trim());
+      }
+      val = parts.join(" ");
+    }
+    if (val) fields[key] = val;
   }
   return fields;
 }

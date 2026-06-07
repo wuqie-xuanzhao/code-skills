@@ -1,6 +1,14 @@
 ---
 name: code-explore
-description: Directed code exploration that produces evidence-based, searchable reports following an "ask → read → conclude" workflow. Trigger when the user says "explore first", "how does X work in this repo", "quickly understand this module", "archive exploration results".
+description: |
+  Directed code exploration that produces evidence-based, searchable reports following an "ask → read → conclude" workflow.
+  Use this skill whenever the user wants to understand code, investigate a question about the codebase, or explore before making changes.
+  Trigger phrases: "explore first", "how does X work", "understand this module", "investigate X", "explore the codebase",
+  "look into X", "quickly understand", "map this module", "what does X do", "trace the flow of X",
+  "这个模块怎么工作的", "探索一下", "看看这段代码", "调查一下", "理解这个模块", "分析一下流程",
+  "feature research", "feasibility check", "are there similar products", "方案调研", "技术选型",
+  "archive exploration results", "document what was observed".
+  Also use when the user asks a question about code that requires reading multiple files to answer — don't just guess, explore and produce evidence.
 ---
 
 # Code Exploration
@@ -241,11 +249,20 @@ When evidence is insufficient, confidence **MUST** be downgraded. Writing high b
 | Continuing to cite outdated explorations | Citing without marking is spreading misinformation |
 | Citing old exploration without checking `status` | When reading old docs, check frontmatter `status` field first; `outdated` docs are reference-only and must be marked |
 
-## References
+## References — When to Read What
 
-- `references/template.md` — document format, section writing guidelines, Mermaid diagram examples
-- `references/template.html` — full HTML example with inline CSS, collapsible sections, confidence badges, floating TOC, and styled callout boxes
-- Repository `CLAUDE.md` — global hard constraints and document map (boundaries to respect during exploration)
+References are loaded on demand. **Do not read them upfront** — only open them when the situation calls for it.
+
+| When | Read |
+|------|------|
+| Drafting the document (Phase 3) — need exact frontmatter schema, section structure, or Mermaid example | `references/template.md` |
+| User requests HTML output instead of Markdown | `references/template.html` (English headings) **or** `references/template_zh.html` (bilingual Chinese+English headings — use when user communicates in Chinese) |
+| User says "explore again" / "re-check" (Phase 1.5) — need decision rules for update vs. replace | `references/template.md` Section 4 (Searching Existing Documents) |
+| Need a Mermaid example for module-overview or spike | `references/template.md` Section 5 (Mermaid Diagram Examples) |
+
+**Repository-level context:** Read `CLAUDE.md` at the start of any exploration — it contains global hard constraints and the document map (boundaries to respect during exploration).
+
+> HTML template note: `template.html` and `template_zh.html` are not just Markdown-to-HTML conversions — they have inline CSS, collapsible sections, confidence badges, floating TOC, and styled callout boxes. The `_zh` variant has bilingual section headings (Chinese + English). Pick the one matching the user's language.
 
 ## Exit Conditions
 
