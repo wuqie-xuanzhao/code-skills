@@ -8,7 +8,7 @@ This file provides the frontmatter, body structure, and writing guidelines used 
 
 ```yaml
 ---
-type: question | module-overview | spike
+type: question | module-overview | spike | feature-research
 date: YYYY-MM-DD
 status: active | outdated
 confidence: high | medium | low
@@ -275,6 +275,23 @@ flowchart LR
     end
     A3 --> X{Compare}
     B3 --> X
+```
+
+### feature-research Type (Product/Approach Comparison)
+
+```mermaid
+flowchart LR
+    subgraph "Open Source"
+        A1[Product A] --> A2["Approach: X"]
+        A3[Product B] --> A4["Approach: Y"]
+    end
+    subgraph "Commercial"
+        B1[Product C] --> B2["Approach: Z"]
+    end
+    A2 --> X{Compare}
+    A4 --> X
+    B2 --> X
+    X --> R["Recommended: Approach Y"]
 ```
 
 ## 6. Anti-Pattern Reference

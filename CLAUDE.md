@@ -11,4 +11,4 @@
 # 当前项目
 
 1. 本项目（wuqie-xuanzhao/code-skills）为开源的 AI Coding 的 Skills 库, 兼容的是 superpowers 技能（路径兼容和补充）
-2. AGENTS.md 和 CLAUDE.md 单一更新后, 运行 scripts\check_docs.mjs 进行同步（1:1 相同）
+2. AGENTS.md 和 CLAUDE.md 单一更新后, 运行 scripts\check_docs.mjs 进行同步（1:1 相同）；scripts\check_constraints.mjs 可扫描源文件中的 TODO/占位符模式；scripts\lint_skills.mjs 校验技能结构

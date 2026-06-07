@@ -269,6 +269,51 @@ Draft the complete report. Self-check against exit conditions.
 - Revise if new information comes up during discussion
 - Only archive to `docs/superpowers/reviews/` if the user explicitly asks to save the report
 
+## Multi-Subagent Orchestration (Optional)
+
+When the review scope is large, a single agent pass may miss cross-file or cross-subsystem issues. This optional mode splits the review across subagents for parallel analysis.
+
+### Trigger Conditions
+
+Activate when ANY of:
+- Diff > 500 lines
+- `deep` review type
+- Change touches 3+ independent subsystems
+- User explicitly requests parallel review
+
+### Pattern
+
+1. **Main agent maps scope** — identify independent review units (typically one per subsystem or change area)
+2. **Dispatch subagents** — each receives a mandate (scope + review angles + output format)
+3. **Subagents review** — each produces a structured mini-report with findings
+4. **Main agent aggregates** — deduplicate findings, resolve conflicts, check cross-unit impacts
+5. **Main agent writes final report** — single coherent report with merged findings
+
+### Subagent Mandate Template
+
+```
+Review mandate:
+  Scope: {files/subsystem to review}
+  Baseline: {what the code looked like before this change}
+  Review angles: {subset of the 8 angles, selected by relevance}
+  Output format:
+    - Summary: 1-2 sentences of assessment
+    - Findings: table with severity, summary, file:line
+    - Detailed findings: one subsection per finding with evidence and failure scenario
+    - Regression risks: identified risks, tagged verified/unverified
+  Constraints:
+    - Do NOT review files outside the assigned scope
+    - Flag any cross-scope dependencies you notice, but do not investigate them
+    - If a finding may relate to {other subagent scope}, note it explicitly
+```
+
+### Aggregation Rules
+
+- **Deduplication**: when two subagents flag the same issue, merge into one finding with combined evidence
+- **Cross-unit impact**: main agent checks for issues that span subagent boundaries — this is the most critical class because no subagent catches these alone
+- **Severity reconciliation**: if subagents disagree on severity, the main agent resolves by re-reading the evidence
+- **Severity escalation**: when a finding appears in multiple subagents' reports, escalate severity by one level (it is a pattern, not an isolated incident)
+
 ## Anti-Patterns
 
 | Anti-Pattern | Why It's Wrong |
@@ -309,6 +354,7 @@ Before marking the review as complete:
 - [ ] Frontmatter includes `commit` (VCS hash of the reviewed state)
 - [ ] Critical and major findings have clear fix suggestions
 - [ ] Report delivered and discussed with the user
+- [ ] If multi-subagent mode was used: cross-unit impact checked, duplicate findings merged, severity escalated for patterns
 
 ## Final Rules
 

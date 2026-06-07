@@ -26,18 +26,20 @@ This skill is solely responsible for evidence-based recording of "what was obser
 - User wants to fix a bug → exploration helps locate issues, but the goal is fixing, not documenting
 - User wants a new feature → exploration helps design, but the output is a plan/spec, not an explore document
 
-## Three Exploration Types
+## Four Exploration Types
 
 | Type | Use When |
 |------|----------|
 | **question** | Investigate a specific question in the codebase and give a conclusion |
 | **module-overview** | Quickly map a module's structure, boundaries, entry points, and dependencies |
 | **spike** | Lightweight technical investigation of multiple possible directions (no final decision) |
+| **feature-research** | Feasibility and approach investigation for a NEW feature, including market/competitive research |
 
 Output format differences by type:
 - `question`: Quick-answer directly answers the question; key evidence supports the answer with code references; Mermaid diagrams generally unnecessary (unless cross-module call chains benefit from one)
 - `module-overview`: Quick-answer includes a Mermaid architecture diagram; key evidence covers entry points, core flows, and boundaries
 - `spike`: Quick-answer includes a Mermaid multi-option comparison diagram; key evidence grouped by option; conclusions only state "feasible / infeasible / risky", don't choose for the user
+- `feature-research`: Quick-answer includes feasibility verdict + competitive landscape summary + recommended approach; key evidence grouped by product/solution found; Mermaid comparison diagram of approaches/products is mandatory; web-sourced findings classified by confidence level
 
 ## Workflow
 
@@ -86,7 +88,35 @@ When exploring code, select tools in this priority order:
 > | 3. Source reading | `Read` | open file / `@file` | `read_file` | `/add` | `read` | `read_file` |
 > | 4. Text search | `Grep` / `Glob` | Find in files | `search_files` | `/search` | `search` | `shell` (grep/find) |
 
-#### Evidence Collection Rules
+#### Web Search Tools (for feature-research)
+
+When the exploration requires web research — searching for similar products, reading documentation of alternatives, or evaluating competitive landscape — use these tools:
+
+| Category | Claude Code | OpenAI Codex | OpenCode | Pi (oh-my-pi) |
+|----------|-------------|--------------|----------|----------------|
+| Web search | `WebSearch` | `web_search` | MCP-based* | MCP-based* |
+| Web page read | `WebFetch` / MCP | `web_search_preview` | MCP-based* | MCP-based* |
+
+> *MCP-based agents (OpenCode, Pi): tool names depend on the user's MCP server configuration. Look for tools with "web", "fetch", "search", or "browser" in the name. Common patterns: `mcp__web_reader__webReader`, `mcp__fetch__fetch`, `mcp__puppeteer__puppeteer_navigate`.
+
+#### Web Research for feature-research Type
+
+When the exploration type is `feature-research`, Phase 2 includes web research alongside code exploration:
+
+1. **Search priority** — open-source first, then commercial/closed-source:
+   - Open-source products with accessible source code (preferred — read actual source)
+   - Open-source products without source code access (read official docs)
+   - Commercial/closed-source products (read official docs, reviews, comparisons)
+2. **Confidence classification for web-sourced findings:**
+
+   | Source Type | Confidence | Example |
+   |-------------|------------|---------|
+   | Source code read | **high** | Cloned repo, read implementation directly |
+   | Official documentation | **medium** | API docs, architecture guide, README |
+   | Blog / forum / third-party | **low** | Reddit thread, medium article, StackOverflow |
+
+3. **Existing feature investigation** — when the feature has analogues in mature products, include insights from those products' approaches: what works well, what doesn't, and why. Apply the same confidence classification.
+4. **Evidence from web research** follows the same rules as code evidence: each item must state which conclusion it supports. Web evidence includes a URL or product name instead of `file:line`.
 
 - **Read real code, don't guess.** Every piece of evidence must come from actual code or config files.
 - Accumulate evidence while reading; **simultaneously think about which conclusion each piece supports** — evidence that supports no conclusion is not recorded.
@@ -114,6 +144,50 @@ Why "stop when enough": exploration is not exhaustive — it builds an evidence 
 ### Phase 5: Suggest Next Steps
 
 - Offer a next-step suggestion ("Want to design a plan based on this exploration?"). If the user says "no", skip. The user decides their own next steps.
+
+## Multi-Subagent Orchestration (Optional)
+
+When the exploration scope is large, a single agent pass may miss cross-cutting concerns. This optional mode splits work across subagents for parallel investigation.
+
+### Trigger Conditions
+
+Activate when ANY of:
+- Scope covers 3+ independent modules
+- `feature-research` type with 3+ products/approaches to evaluate
+- User explicitly requests parallel investigation
+
+### Pattern
+
+1. **Main agent maps scope** — identify independent work units (typically one per module or product)
+2. **Dispatch subagents** — each receives a mandate (scope + questions + output format)
+3. **Subagents investigate** — each produces a structured mini-report
+4. **Main agent aggregates** — deduplicate findings, resolve conflicts, build unified conclusion
+5. **Main agent writes final document** — single coherent report with merged evidence
+
+### Subagent Mandate Template
+
+```
+Explore mandate:
+  Scope: {module path or product name}
+  Questions: {1-2 specific questions to answer}
+  Type: {question | module-overview | spike | feature-research}
+  Output format:
+    - Quick-answer: 2-3 sentences + Mermaid diagram if applicable
+    - Key evidence: 3-5 items with file:line (or URL for web research)
+    - Confidence: high/medium/low with justification
+    - Open questions: any unresolved items
+  Constraints:
+    - Do NOT explore outside the assigned scope
+    - Do NOT make decisions — record observations only
+    - If scope overlaps with {other subagent scope}, note it but do not investigate
+```
+
+### Aggregation Rules
+
+- **Deduplication**: when two subagents report overlapping findings, keep the one with stronger evidence
+- **Conflict resolution**: when subagents disagree, investigate the conflict point directly and document both views
+- **Evidence merging**: evidence items from different subagents are numbered sequentially in the final report
+- **Confidence**: overall confidence is the minimum across subagents for cross-cutting conclusions; individual sections retain their own confidence levels
 
 ## Document Format
 
@@ -180,13 +254,15 @@ Before marking exploration as complete:
 - [ ] Exploration question and scope are clearly defined
 - [ ] Quick-answer section gives core conclusions (conclusions first)
 - [ ] 3–8 key evidence items, each with `file:line` and explanation of which conclusion it supports
-- [ ] module-overview / spike types have a Mermaid diagram in the quick-answer section
+- [ ] module-overview / spike / feature-research types have a Mermaid diagram in the quick-answer section
+- [ ] feature-research type: web-sourced findings classified by confidence level
 - [ ] Confidence matches evidence sufficiency
 - [ ] Frontmatter includes `scope` (paths explored) and `commit` (VCS hash)
 - [ ] Document archived to `docs/superpowers/explore/`
 - [ ] If replacing: old document marked `status: outdated` + `superseded-by`
 - [ ] If updating: original file has `updated: YYYY-MM-DD` appended
 - [ ] Follow-up suggestions provided
+- [ ] If multi-subagent mode was used: aggregation notes included, cross-unit conflicts resolved, confidence reflects minimum across subagents
 
 ## Final Rules
 

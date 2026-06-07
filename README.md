@@ -17,6 +17,7 @@ code-skills/
 ├── AGENTS.md              # 与 CLAUDE.md 保持同步
 ├── scripts/
 │   ├── check_docs.mjs     # 同步 CLAUDE.md ↔ AGENTS.md
+│   ├── check_constraints.mjs  # 扫描源文件占位符模式
 │   └── lint_skills.mjs    # 校验技能 frontmatter 与结构
 ├── code-explore/
 │   ├── SKILL.md           # 技能定义（AI 执行版本）
@@ -42,6 +43,9 @@ code-skills/
 ```bash
 # 同步 CLAUDE.md 和 AGENTS.md
 node scripts/check_docs.mjs
+
+# 扫描占位符模式
+node scripts/check_constraints.mjs --diff HEAD
 
 # 校验所有技能
 node scripts/lint_skills.mjs
