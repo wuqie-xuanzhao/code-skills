@@ -1,0 +1,186 @@
+{
+  "version": 1,
+  "description": "Patterns indicating incomplete, placeholder, or stub implementations. Used by code-review skill and check scripts.",
+  "rules": [
+    {
+      "id": "comment-todo",
+      "category": "comment",
+      "severity": "major",
+      "message": "TODO placeholder — code is explicitly incomplete",
+      "patterns": [
+        { "regex": "\\bTODO\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "comment-fixme",
+      "category": "comment",
+      "severity": "major",
+      "message": "FIXME placeholder — known issue left unfixed",
+      "patterns": [
+        { "regex": "\\bFIXME\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "comment-xxx",
+      "category": "comment",
+      "severity": "major",
+      "message": "XXX placeholder — code flagged as questionable",
+      "patterns": [
+        { "regex": "\\bXXX\\b", "languages": ["*"], "flags": "" }
+      ]
+    },
+    {
+      "id": "comment-hack",
+      "category": "comment",
+      "severity": "major",
+      "message": "HACK marker — workaround that should be properly fixed",
+      "patterns": [
+        { "regex": "\\bHACK\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "comment-tbd",
+      "category": "comment",
+      "severity": "major",
+      "message": "TBD placeholder — decision or implementation deferred",
+      "patterns": [
+        { "regex": "\\bTBD\\b", "languages": ["*"], "flags": "" }
+      ]
+    },
+    {
+      "id": "unimpl-python-pass",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "Python pass statement — function body is empty",
+      "patterns": [
+        { "regex": "^\\s*pass\\s*$", "languages": ["python"], "flags": "" }
+      ]
+    },
+    {
+      "id": "unimpl-python-not-implemented",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "NotImplementedError raised — code will crash at runtime",
+      "patterns": [
+        { "regex": "raise\\s+NotImplementedError", "languages": ["python"], "flags": "" }
+      ]
+    },
+    {
+      "id": "unimpl-rust-todo",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "Rust todo!() macro — code will panic at runtime",
+      "patterns": [
+        { "regex": "todo!\\(", "languages": ["rust"], "flags": "" }
+      ]
+    },
+    {
+      "id": "unimpl-rust-unimplemented",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "Rust unimplemented!() macro — code will panic at runtime",
+      "patterns": [
+        { "regex": "unimplemented!\\(", "languages": ["rust"], "flags": "" }
+      ]
+    },
+    {
+      "id": "unimpl-rust-panic-todo",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "Rust panic! with TODO message — code will crash at runtime",
+      "patterns": [
+        { "regex": "panic!\\([\"']TODO", "languages": ["rust"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "unimpl-js-not-implemented",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "JS/TS throws 'not implemented' — code will crash at runtime",
+      "patterns": [
+        { "regex": "throw\\s+new\\s+Error\\([\"']not implemented", "languages": ["javascript", "typescript"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "unimpl-js-return-null-todo",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "return null/undefined with TODO — stub returning wrong value",
+      "patterns": [
+        { "regex": "return\\s+(null|undefined)\\s*;?\\s*//\\s*TODO", "languages": ["javascript", "typescript"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "unimpl-js-stub-error",
+      "category": "unimplemented",
+      "severity": "critical",
+      "message": "JS/TS throws 'stub' — placeholder error",
+      "patterns": [
+        { "regex": "throw\\s+new\\s+Error\\([\"']stub", "languages": ["javascript", "typescript"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "empty-catch",
+      "category": "empty-structure",
+      "severity": "major",
+      "message": "Empty catch block — errors silently swallowed",
+      "patterns": [
+        { "regex": "catch\\s*\\([^)]*\\)\\s*\\{\\s*\\}", "languages": ["javascript", "typescript", "java"], "flags": "" }
+      ]
+    },
+    {
+      "id": "soft-stub",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'stub' marker — may indicate placeholder implementation",
+      "patterns": [
+        { "regex": "\\bstub\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "soft-dummy",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'dummy' marker — may indicate test-only code in production",
+      "patterns": [
+        { "regex": "\\bdummy\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "soft-placeholder",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'placeholder' marker — may indicate temporary implementation",
+      "patterns": [
+        { "regex": "\\bplaceholder\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "soft-temporary",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'temporary' marker — may indicate code meant to be removed",
+      "patterns": [
+        { "regex": "\\btemporary\\b|\\btemp\\b", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "soft-testing-only",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'testing only' marker — code not meant for production",
+      "patterns": [
+        { "regex": "testing\\s+only|for\\s+testing", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "soft-hardcoded",
+      "category": "soft-marker",
+      "severity": "minor",
+      "message": "'hardcoded' marker — value should come from configuration",
+      "patterns": [
+        { "regex": "hard[\\s-]?cod", "languages": ["*"], "flags": "i" }
+      ]
+    }
+  ]
+}

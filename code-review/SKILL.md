@@ -174,7 +174,20 @@ Only when the change touches: auth, input handling, data storage, network commun
 - Injection vectors
 - Insecure defaults
 
-#### Angle 7: Regression Verification
+#### Angle 7: Placeholder & Incomplete Implementation
+
+AI-generated code is particularly prone to leaving placeholder implementations — the code compiles and looks plausible but is hollow. Scan every changed file for patterns indicating incomplete work:
+
+- **Comment markers:** `TODO`, `FIXME`, `XXX`, `HACK`, `TBD`
+- **Unimplemented code:** `pass`, `NotImplementedError`, `todo!()`, `unimplemented!()`, `throw new Error("not implemented")`
+- **Empty structures:** empty function bodies, empty catch blocks, empty if/else branches, bare `return null` as entire function body
+- **Soft markers:** `stub`, `dummy`, `placeholder`, `temporary`, `testing only`, `hardcoded` (in non-config code)
+
+Why this matters: a `TODO` is a confessed bug that hasn't happened yet. An empty catch block silently swallows errors. A `return null` stub returns wrong values to every caller. These are not style issues — they are correctness failures that will surface in production.
+
+If the codebase already has a constraint check script (referencing `references/constraints.json`), run it. Otherwise, apply the patterns manually. Report every match as a finding; severity follows the classification in `references/constraints.md`.
+
+#### Angle 8: Regression Verification
 
 This angle is what separates "the new code works" from "the old stuff still works too." For AI-generated changes this is the most critical angle — AI can satisfy the immediate requirement while silently breaking existing behavior.
 
@@ -277,6 +290,8 @@ Draft the complete report. Self-check against exit conditions.
 
 - `references/template.md` — report format, section writing guidelines, severity decision tree
 - `references/template.html` — full HTML example with inline CSS, collapsible findings, color-coded severity badges, floating TOC, and styled callout boxes
+- `references/constraints.md` — placeholder and incomplete implementation patterns (human-readable)
+- `references/constraints.json` — same patterns in machine-readable format, for building check scripts
 
 ## Exit Conditions
 
