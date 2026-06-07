@@ -154,6 +154,21 @@ Scan for classic pitfalls of the diff's language and framework:
 - SQL: injection, missing parameterization
 - General: timezone/DST drift, race conditions, resource leaks
 
+For deeper language-specific review, consult dedicated references when available. Common coverage areas:
+
+| Language | Key Topics |
+|----------|------------|
+| TypeScript | type safety, async/await, `any` avoidance, immutability |
+| React / Vue / Angular | hooks rules, reactivity pitfalls, SSR boundaries, state management |
+| Rust | ownership/borrowing, unsafe audit, async cancellation, error handling |
+| Python | mutable defaults, exception handling, class attributes, async pitfalls |
+| Go | error handling, goroutine/channel, context, interface design |
+| Java / Kotlin | virtual threads, coroutines, null safety, stream/optional misuse |
+| C / C++ | pointer safety, RAII, lifetime, undefined behavior |
+| Django / NestJS | N+1 queries, security middleware, DI anti-patterns |
+
+When a language-specific reference file exists in the project or agent environment, read it for detailed patterns rather than relying on memory.
+
 #### Angle 5: Quality & Maintainability
 
 Flag issues that make the code harder to understand, modify, or test:
@@ -256,9 +271,13 @@ Draft the complete report. Self-check against exit conditions.
 **Language & Format:**
 
 - **Language:** The report MUST be written in the same language the user is communicating in. If the user speaks Chinese, write in Chinese. If English, write in English. Follow the user's language throughout — headings, findings, evidence, and recommendations all match the user's language.
+- **Severity labels:** Match the user's language:
+  - English: `🔴 [blocking]` / `🟡 [important]` / `🟢 [nit]` / `💡 [suggestion]` / `🎉 [praise]`
+  - Chinese: `[必须修复]` / `[建议修改]` / `[仅供参考]` / `[问题]` / `[肯定]`
+- **Feedback style:** Suggest, don't command. Ask questions instead of stating problems. See `references/communication.md` for detailed patterns and bilingual examples.
 - **Format:** Default is Markdown (`.md`). The user may request HTML format (`.html`) instead. When HTML is requested:
   - Use a polished, professional stylesheet — not a bare Markdown-to-HTML conversion. The HTML output should look distinctly different from the Markdown source: richer typography, purposeful color, and visual hierarchy.
-  - Leverage HTML-specific capabilities: collapsible `<details>` for detailed findings, color-coded severity badges (🔴 critical, 🟠 major, 🟡 minor, 🔵 suggestion), a floating table of contents, styled callout boxes for critical findings vs. minor notes, and syntax-highlighted code blocks with line-number anchors.
+  - Leverage HTML-specific capabilities: collapsible `<details>` for detailed findings, color-coded severity badges, a floating table of contents, styled callout boxes for critical findings vs. minor notes, and syntax-highlighted code blocks with line-number anchors.
   - Keep the same section structure as the Markdown template — HTML is presentation, not restructuring.
   - Include inline `<style>` CSS so the document is self-contained and portable.
 
@@ -337,6 +356,7 @@ Review mandate:
 - `references/template.html` — full HTML example with inline CSS, collapsible findings, color-coded severity badges, floating TOC, and styled callout boxes
 - `references/constraints.md` — placeholder and incomplete implementation patterns (human-readable)
 - `references/constraints.json` — same patterns in machine-readable format, for building check scripts
+- `references/communication.md` — feedback techniques, bilingual severity labels, Chinese team anti-patterns, red flags
 
 ## Exit Conditions
 

@@ -181,6 +181,58 @@
       "patterns": [
         { "regex": "hard[\\s-]?cod", "languages": ["*"], "flags": "i" }
       ]
+    },
+    {
+      "id": "red-debug-leftover",
+      "category": "red-flag",
+      "severity": "minor",
+      "message": "Debug print statement — verify this is intentional, not a leftover",
+      "patterns": [
+        { "regex": "console\\.log\\(.*(?:debug|temp|test|fixme|todo|trace|inspect)", "languages": ["javascript", "typescript"], "flags": "i" },
+        { "regex": "print\\(f?['\"].*(?:debug|temp|test|fixme)", "languages": ["python"], "flags": "i" },
+        { "regex": "println!\\(['\"].*(?:debug|temp|test)", "languages": ["rust"], "flags": "i" },
+        { "regex": "fmt\\.Print.*(?:debug|temp|test)", "languages": ["go"], "flags": "i" },
+        { "regex": "System\\.out\\.print.*(?:debug|temp|test)", "languages": ["java"], "flags": "i" },
+        { "regex": "dbg!", "languages": ["rust"], "flags": "" }
+      ]
+    },
+    {
+      "id": "red-commented-out-code",
+      "category": "red-flag",
+      "severity": "minor",
+      "message": "Commented-out code — delete or explain why it's kept",
+      "patterns": [
+        { "regex": "^\\s*//\\s*(function|const|let|var|if|for|while|return|import|export)\\b", "languages": ["javascript", "typescript", "java", "go", "rust"], "flags": "" },
+        { "regex": "^\\s*#\\s*(def|class|import|from|if|for|while|return)\\b", "languages": ["python"], "flags": "" }
+      ]
+    },
+    {
+      "id": "red-ts-any",
+      "category": "red-flag",
+      "severity": "major",
+      "message": "`any` type in TypeScript — use proper types or `unknown` with type guards",
+      "patterns": [
+        { "regex": ":\\s*any\\b", "languages": ["typescript"], "flags": "" },
+        { "regex": "as\\s+any\\b", "languages": ["typescript"], "flags": "" }
+      ]
+    },
+    {
+      "id": "red-hardcoded-secret",
+      "category": "red-flag",
+      "severity": "critical",
+      "message": "Possible hardcoded secret/credential — use environment variables",
+      "patterns": [
+        { "regex": "(password|secret|api_key|apikey|token|credential)\\s*[:=]\\s*['\"][^'\"]{8,}", "languages": ["*"], "flags": "i" }
+      ]
+    },
+    {
+      "id": "red-magic-number",
+      "category": "red-flag",
+      "severity": "minor",
+      "message": "Magic number — consider extracting to a named constant",
+      "patterns": [
+        { "regex": "(?<![\\w.])\\d{4,}(?![\\w.])", "languages": ["*"], "flags": "" }
+      ]
     }
   ]
 }

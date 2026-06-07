@@ -210,3 +210,35 @@ Does it cause crashes, data loss, or security issues?
 | Finding duplicates existing finding | Merge into one with combined evidence |
 | Reviewing removed code as if it's new | Read the diff first — understand what was deleted and why |
 | Suggestion presented as critical | Keep subjective opinions at suggestion level |
+
+## 6. PR Comment Format Variant
+
+When reviewing on GitHub/GitLab (not producing a standalone report), use this inline comment format instead of the full report:
+
+```markdown
+## Summary
+[Brief overview — 1-2 sentences]
+
+**PR Size:** [Small/Medium/Large] (~X lines)
+
+## Required Changes
+🔴 **[blocking]** [Issue description]
+> `file.ts:123` — [explanation + suggested fix]
+
+## Important Suggestions
+🟡 **[important]** [Issue description]
+> [Why this matters + suggested approach]
+
+## Minor Suggestions
+🟢 **[nit]** [Minor improvement]
+
+## Verdict
+[ ] ✅ Approve  [ ] 💬 Comment  [ ] 🔄 Request Changes
+```
+
+When the user communicates in Chinese, replace labels:
+- `[blocking]` → `[必须修复]`
+- `[important]` → `[建议修改]`
+- `[nit]` → `[仅供参考]`
+
+For detailed feedback patterns and Chinese team communication guidance, see `communication.md`.
