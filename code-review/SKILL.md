@@ -192,6 +192,8 @@ Flag issues that make the code harder to understand, modify, or test:
 - Missing or misleading comments
 - Poor naming that obscures intent
 
+For anti-patterns beyond this list (parameter sprawl, leaky abstractions, nested conditionals, stringly-typed code, TOCTOU, no-op updates), read `references/crosscut/code-quality-universal.md`.
+
 #### Angle 6: Security (when applicable)
 
 Only when the change touches: auth, input handling, data storage, network communication, or configuration.
@@ -201,6 +203,8 @@ Only when the change touches: auth, input handling, data storage, network commun
 - Sensitive data exposure
 - Injection vectors
 - Insecure defaults
+
+For comprehensive security review (OWASP Top 10 with code examples), read `references/crosscut/security-review-guide.md`.
 
 #### Angle 7: Placeholder & Incomplete Implementation
 
