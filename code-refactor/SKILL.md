@@ -10,7 +10,7 @@ description: |
 
 Refactoring changes code structure while preserving externally observable behavior. It is controlled evolution, not a rewrite and not a feature delivery shortcut.
 
-Use this skill to turn a clear maintainability, structure, modernization, or behavior-preserving performance goal into small verified changes. Prefer existing `code-review` findings as input when they exist; a review finding explains *why* the code deserves attention, while this skill controls *how* to change it safely.
+Use this skill to turn a clear maintainability, structure, modernization, or behavior-preserving performance goal into small verified changes. Prefer existing `code-review` findings as input when they exist; a review finding explains *why* the code deserves attention, while this skill controls *how* to change it safely. When the codebase area is unfamiliar or structural boundaries are unclear, do a quick `code-explore` first — exploration maps the terrain, refactoring changes it.
 
 ## When to Use
 
@@ -30,6 +30,7 @@ Use this skill to turn a clear maintainability, structure, modernization, or beh
 - Full rewrites or repo rebuilds
 - Pure code review with no intent to change code
 - Style-only churn that has no maintainability, safety, or performance goal
+- User wants to explore code without changing it → use `code-explore`
 
 If the request mixes refactor with feature work or bug fixing, split the request first. Execute only the refactor slice unless the user explicitly switches tasks.
 
@@ -56,6 +57,10 @@ Ask only if unclear:
 Behavior boundary includes public APIs, return shapes, errors, logs relied on by users, config keys, database schema, authorization behavior, timing/order guarantees, generated files, and UI-visible output.
 
 If you cannot name the behavior boundary, you are not ready to refactor. Read `references/safety.md`.
+
+#### Load Existing Exploration Context
+
+Before reading code from scratch, check `docs/superpowers/explore/` for exploration reports whose `scope` overlaps with the refactoring target. If found, load them as background context — they may already document call chains, dependencies, and boundaries that inform the behavior boundary and refactor plan.
 
 ### Phase 2: Reuse Existing Review Findings
 
@@ -109,7 +114,7 @@ Use `references/techniques.md` for mechanics and `references/patterns.md` only w
 
 Before claiming completion, run the agreed verification and summarize evidence. If verification cannot be run, say exactly why and what remains unproven.
 
-Suggest a follow-up `code-review` when the refactor touches critical paths, public APIs, security-sensitive code, or multiple modules.
+Suggest a follow-up `code-review` when the refactor touches critical paths, public APIs, security-sensitive code, or multiple modules. Suggest a prior `code-explore` when the refactoring target is unfamiliar territory with unclear module boundaries, hidden dependencies, or undocumented call chains.
 
 ## Reference Loading Guide
 

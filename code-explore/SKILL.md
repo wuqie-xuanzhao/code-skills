@@ -33,6 +33,8 @@ This skill is solely responsible for evidence-based recording of "what was obser
 - User already knows what to do and has a clear implementation plan → execute directly
 - User wants to fix a bug → exploration helps locate issues, but the goal is fixing, not documenting
 - User wants a new feature → exploration helps design, but the output is a plan/spec, not an explore document
+- User wants to refactor existing code → use `code-refactor`
+
 
 ## Four Exploration Types
 
@@ -151,7 +153,11 @@ Why "stop when enough": exploration is not exhaustive — it builds an evidence 
 
 ### Phase 5: Suggest Next Steps
 
-- Offer a next-step suggestion ("Want to design a plan based on this exploration?"). If the user says "no", skip. The user decides their own next steps.
+- Offer a next-step suggestion based on what the exploration found:
+  - Structural issues, code smells, duplicated logic → suggest `code-refactor`
+  - Design a plan → "Want to design a plan based on this exploration?"
+  - Other → the user decides their own next steps
+- If the user says "no", skip. The user decides their own next steps.
 
 ## Multi-Subagent Orchestration (Optional)
 
