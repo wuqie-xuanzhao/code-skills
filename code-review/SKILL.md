@@ -155,28 +155,32 @@ For each changed function, check callers and callees:
 
 #### Angle 4: Language & Framework Pitfalls
 
-Scan for classic pitfalls of the diff's language and framework:
+Scan for classic pitfalls of the diff's language and framework. Start with the generic list below, then **read the matching language reference** from `references/lang/` for deeper, language-specific patterns:
 
+| Language | Reference | Key Topics |
+|----------|-----------|------------|
+| TypeScript | `references/lang/typescript.md` | type safety, async/await, `any` avoidance, immutability |
+| React | `references/lang/react.md` | hooks rules, useEffect deps, React 19 Actions, RSC, Suspense |
+| Vue 3 | `references/lang/vue.md` | Composition API, reactivity pitfalls, watchers, composables |
+| Angular 17+ | `references/lang/angular.md` | Signals, standalone components, RxJS, zoneless change detection |
+| Rust | `references/lang/rust.md` | ownership/borrowing, unsafe audit, async cancellation, error handling |
+| Python | `references/lang/python.md` | mutable defaults, exception handling, class attributes, async |
+| Go | `references/lang/go.md` | error handling, goroutine/channel, context, interface design |
+| Java | `references/lang/java.md` | virtual threads, Spring Boot 3, Stream/Optional |
+| C# / .NET | `references/lang/csharp.md` | C# 12, async patterns, EF Core, ASP.NET Core, LINQ |
+| Kotlin | `references/lang/kotlin.md` | coroutines, Flow, Compose, null safety |
+| Django / DRF | `references/lang/django.md` | security, N+1 queries, serializer anti-patterns |
+| NestJS | `references/lang/nestjs.md` | DI, layered architecture, DTO validation, circular deps |
+| Svelte | `references/lang/svelte.md` | Runes, load functions, form actions, SSR/CSR boundary |
+| C | `references/lang/c.md` | pointer/buffer safety, UB, error handling |
+| C++ | `references/lang/cpp.md` | RAII, lifetime, Rule of 0/3/5, exception safety |
+| CSS / Less / Sass | `references/lang/css-less-sass.md` | variables, !important, performance, responsive |
+| Qt | `references/lang/qt.md` | object model, signals/slots, memory management, threading |
+
+Generic pitfalls (always check regardless of language):
 - JS: falsy-zero, `==` coercion, closure-captured loop var, floating point equality
-- Python: mutable default args, late-binding closures, `is` vs `==`
-- Go: nil-map write, range-var capture, goroutine leaks
 - SQL: injection, missing parameterization
 - General: timezone/DST drift, race conditions, resource leaks
-
-For deeper language-specific review, consult dedicated references when available. Common coverage areas:
-
-| Language | Key Topics |
-|----------|------------|
-| TypeScript | type safety, async/await, `any` avoidance, immutability |
-| React / Vue / Angular | hooks rules, reactivity pitfalls, SSR boundaries, state management |
-| Rust | ownership/borrowing, unsafe audit, async cancellation, error handling |
-| Python | mutable defaults, exception handling, class attributes, async pitfalls |
-| Go | error handling, goroutine/channel, context, interface design |
-| Java / Kotlin | virtual threads, coroutines, null safety, stream/optional misuse |
-| C / C++ | pointer safety, RAII, lifetime, undefined behavior |
-| Django / NestJS | N+1 queries, security middleware, DI anti-patterns |
-
-When a language-specific reference file exists in the project or agent environment, read it for detailed patterns rather than relying on memory.
 
 #### Angle 5: Quality & Maintainability
 
@@ -363,6 +367,8 @@ Review mandate:
 
 References are loaded on demand. **Do not read them upfront** — only open them when the situation calls for it.
 
+### Templates & Constraints
+
 | When | Read |
 |------|------|
 | Writing the report (Phase 5) — need exact section structure, severity decision tree, or report format | `references/template.md` |
@@ -371,7 +377,24 @@ References are loaded on demand. **Do not read them upfront** — only open them
 | Running Angle 7 (placeholder detection) — need the pattern list for manual scan | `references/constraints.md` |
 | Running a constraint check script — machine-readable pattern definitions | `references/constraints.json` |
 | Writing findings feedback — need expression patterns, severity label formats, or dealing with Chinese team dynamics | `references/communication.md` |
-| Writing feedback for a Chinese-speaking team — need bilingual labels or team anti-pattern guidance | `references/communication.md` Sections 1–3 |
+
+### Language-Specific (`references/lang/`)
+
+| When | Read |
+|------|------|
+| Angle 4 and the diff contains code in a specific language/framework | Read the matching file from `references/lang/` — e.g., diff has TypeScript → read `lang/typescript.md` |
+| Only read the relevant language file(s) — do not load all 17 files at once | |
+
+### Cross-Cutting (`references/crosscut/`)
+
+| When | Read |
+|------|------|
+| Phase 2 impact scope mapping reveals significant architectural changes | `crosscut/architecture-review-guide.md` |
+| Angle 7d flags performance regression risk, or diff touches hot paths | `crosscut/performance-review-guide.md` |
+| Angle 6 (security) is active — need OWASP-level detail | `crosscut/security-review-guide.md` |
+| Need a quick bug-pattern checklist for the diff's language(s) | `crosscut/common-bugs-checklist.md` |
+| Angle 5 (quality) — need anti-pattern reference (parameter sprawl, leaky abstractions, etc.) | `crosscut/code-quality-universal.md` |
+| New to code review or want general best practices | `crosscut/code-review-best-practices.md` |
 
 > **HTML template note:** `template.html` and `template_zh.html` have polished inline CSS — collapsible sections, color-coded severity badges, floating TOC, styled callout boxes. The `_zh` variant has bilingual section headings (Chinese + English). Pick the one matching the user's language.
 
