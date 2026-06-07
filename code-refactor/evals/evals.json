@@ -1,0 +1,70 @@
+{
+  "skill_name": "code-refactor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We have a code-review report saying `src/orders/processOrder.ts` has a 180-line function with duplicated validation and pricing logic. Refactor it based on the review findings, but don't change behavior.",
+      "expected_output": "The agent should reuse the review finding as input, classify it as refactor work, define the preserved behavior boundary, propose small verified steps such as characterization tests plus extraction, avoid redoing a full review, and report verification evidence/deferred items.",
+      "files": [],
+      "assertions": [
+        "Mentions reading or reusing the existing code-review report/finding before planning changes.",
+        "Classifies the work as refactor-only rather than bugfix or feature work.",
+        "Defines behavior that must remain unchanged, including validation and pricing outcomes.",
+        "Requires tests or characterization coverage before extracting logic.",
+        "Includes a small-step plan and verification evidence format."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Refactor the user settings module to clean it up, and while you're there add a new dark mode preference field.",
+      "expected_output": "The agent should split the request into refactor and feature work, refuse to silently add the dark mode field as part of refactoring, proceed only with cleanup if scope is approved, and list dark mode under deferred/not done or ask the user to switch to feature planning.",
+      "files": [],
+      "assertions": [
+        "Explicitly identifies dark mode preference as a new feature or behavior change.",
+        "Does not include implementation steps for adding dark mode in the refactor plan.",
+        "Offers to defer the feature or handle it as a separate task.",
+        "Defines the cleanup behavior boundary before refactoring.",
+        "Includes a Deferred / Not Done section or equivalent."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "This payment service has no tests but it's a mess. Split it into smaller services and modernize the API usage.",
+      "expected_output": "The agent should treat this as high-risk structural plus modernization refactor, stop before broad edits, require characterization tests or golden-master coverage, identify payment behavior boundaries, and propose a staged plan with rollback points.",
+      "files": [],
+      "assertions": [
+        "Flags the absence of tests as a blocker for immediate broad refactoring.",
+        "Requires characterization tests or another safety net before splitting services.",
+        "Names payment behavior boundaries such as amounts, errors, persistence, or external API contract.",
+        "Proposes staged migration rather than a big-bang rewrite.",
+        "Mentions rollback points or verification after each stage."
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Optimize this data loader; it's slow because it recomputes the same derived values. Keep behavior identical.",
+      "expected_output": "The agent should treat this as performance-preserving refactor, define behavioral equivalence, record a performance baseline, propose caching or precomputation with invalidation/lifetime rules, and verify output shape, ordering, and error semantics.",
+      "files": [],
+      "assertions": [
+        "Classifies the request as performance-preserving refactor.",
+        "Requires a performance baseline before optimization.",
+        "Defines behavioral equivalence, including output shape and ordering.",
+        "Mentions cache lifetime or invalidation if caching is proposed.",
+        "Does not accept behavior changes as a valid optimization."
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Migrate this old callback-based API wrapper to async/await and clean up the module boundaries.",
+      "expected_output": "The agent should treat this as modernization migration, preserve the public contract unless approved, characterize callback error/timing behavior, introduce an adapter or staged migration path, and avoid forcing all callers to change at once.",
+      "files": [],
+      "assertions": [
+        "Classifies the request as modernization migration refactor.",
+        "Mentions preserving the public API or asking for explicit approval before changing it.",
+        "Requires characterization of callback error and timing semantics.",
+        "Proposes adapter or staged migration instead of replacing all callers at once.",
+        "Includes verification for old and new API behavior equivalence."
+      ]
+    }
+  ]
+}

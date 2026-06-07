@@ -57,8 +57,10 @@ function getHeadings(content) {
 }
 
 // --- Discover skill directories ---
+const ignoredRootDirs = new Set(["scripts", "node_modules", "docs"]);
+
 const skillDirs = readdirSync(root, { withFileTypes: true })
-  .filter((d) => d.isDirectory() && !d.name.startsWith(".") && d.name !== "scripts" && d.name !== "node_modules")
+  .filter((d) => d.isDirectory() && !d.name.startsWith(".") && !ignoredRootDirs.has(d.name))
   .map((d) => d.name);
 
 console.log(`\nLinting skills in: ${root}\n`);
